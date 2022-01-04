@@ -1,2 +1,2 @@
-# Todo-Vue_Laravel_TS
+# Todo-Vue_Laravel
 Vue, Laravel, TypeScript, Docker, MySQL

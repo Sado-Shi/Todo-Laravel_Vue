@@ -1,2 +1,2 @@
-# Twitter-Vue_Laravel
-Vue, Laravel, TypeScript, Docker, MySQL
+# env_sample_docker
+docker環境用のsample

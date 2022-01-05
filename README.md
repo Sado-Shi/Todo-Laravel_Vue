@@ -4,7 +4,7 @@
 
 ## Front
 - TypeScript
-- Vue.js 3.0.5
+- Vue.js 3.2
 
 ## Backend
 - PHP 8.0

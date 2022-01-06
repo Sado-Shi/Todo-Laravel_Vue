@@ -21,3 +21,9 @@ mix.ts('resources/js/app.js', 'public/js').vue()
 if (mix.inProduction()) {
     mix.version();
 }
+
+// mix.browserSync({
+//   proxy: '127.0.0.1',
+//   host: '127.0.0.1',
+//   open: 'external'
+// });

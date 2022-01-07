@@ -2,7 +2,7 @@
   <app-layout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Dashboard
+        Dashboard Inertia.js
       </h2>
     </template>
 
@@ -16,15 +16,7 @@
   </app-layout>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
-
-export default defineComponent({
-  components: {
-    AppLayout,
-    Welcome,
-  },
-});
 </script>

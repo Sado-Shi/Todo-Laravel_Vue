@@ -330,7 +330,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 

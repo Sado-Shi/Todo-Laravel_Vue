@@ -68,7 +68,7 @@
     </jet-form-section>
 </template>
 
-<script>
+<script lang="ts">
     import { defineComponent } from 'vue'
     import JetButton from '@/Jetstream/Button.vue'
     import JetFormSection from '@/Jetstream/FormSection.vue'

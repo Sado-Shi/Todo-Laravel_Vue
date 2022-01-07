@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import { Head } from "@inertiajs/inertia-vue3";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo.vue";

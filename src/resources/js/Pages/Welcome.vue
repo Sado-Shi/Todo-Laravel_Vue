@@ -330,21 +330,15 @@
 }
 </style>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
-export default defineComponent({
-  components: {
-    Head,
-    Link,
-  },
+interface Props {
+  canLogin: boolean;
+  canRegister: boolean;
+  laravelVersion: string;
+  phpVersion: string;
+}
 
-  props: {
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-  },
-});
+const props = defineProps<Props>();
 </script>

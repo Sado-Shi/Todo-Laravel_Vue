@@ -52,7 +52,7 @@
     </jet-action-section>
 </template>
 
-<script>
+<script lang="ts">
     import { defineComponent } from 'vue'
     import JetActionSection from '@/Jetstream/ActionSection.vue'
     import JetDialogModal from '@/Jetstream/DialogModal.vue'

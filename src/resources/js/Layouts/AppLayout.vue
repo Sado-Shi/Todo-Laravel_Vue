@@ -25,6 +25,13 @@
                 >
                   Dashboard
                 </jet-nav-link>
+
+                <jet-nav-link
+                  :href="route('twitter.index')"
+                  :active="route().current('twitter.index')"
+                >
+                  Twitter
+                </jet-nav-link>
               </div>
             </div>
 

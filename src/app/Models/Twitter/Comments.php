@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Twitter\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,4 +10,8 @@ class Comments extends Model
 {
   use HasFactory;
   use SoftDeletes;
+
+  protected $fillable = [
+    'text',
+  ];
 }

@@ -17,17 +17,31 @@ use App\Http\Controllers\Twitter\TwitterController;
 */
 
 Route::get('/', function () {
-  return Inertia::render('Welcome', [
-    'canLogin' => Route::has('login'),
-    'canRegister' => Route::has('register'),
-    'laravelVersion' => Application::VERSION,
-    'phpVersion' => PHP_VERSION,
-  ]);
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
 Route::get('/twitters', [TwitterController::class, 'index'])
-  ->name('twitter.index')->middleware('auth');
+    ->name('twitter.index')->middleware('auth');
+
+Route::resource('/twitters', TwitterController::class)
+    ->names([
+        'index' => 'twitter.index',
+        'create' => 'twitter.create',
+        'edit' => 'twitter.edit',
+        'update' => 'twitter.update',
+        'destroy' => 'twitter.destroy',
+        'store' => 'twitter.store'
+    ])
+    ->middleware(['auth']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-  return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard');
 })->name('dashboard');
+
+Route::get('/twitters/create', [TwitterController::class, 'create'])
+    ->name('twitter.create')->middleware('auth');

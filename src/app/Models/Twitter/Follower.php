@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Twitter\Models;
+namespace App\Models\Twitter;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Followers extends Model
+class Follower extends Model
 {
     use HasFactory;
 }

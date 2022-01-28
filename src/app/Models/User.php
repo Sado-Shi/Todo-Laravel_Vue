@@ -24,6 +24,7 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'id',
         'account_name',
         'name',
         'profile_image',
@@ -60,4 +61,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Twitter\Post');
+    }
 }

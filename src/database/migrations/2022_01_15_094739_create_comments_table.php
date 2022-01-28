@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
       //user_id(post_id)はuser(post)テーブルのidを外部キーとする
       $table->foreignId('user_id')->constrained()->comment('ユーザID');
       $table->foreignId('post_id')->constrained()->comment('ツイート投稿ID');
-      $table->string('text')->comment('コメント本文');
+      $table->string('text', 140)->comment('コメント本文');
       $table->softDeletes();
       $table->timestamps();
 

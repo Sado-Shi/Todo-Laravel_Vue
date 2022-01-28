@@ -15,8 +15,8 @@ class CreatePostsTable extends Migration
   {
     Schema::create('posts', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->constrained()->comment('ユーザID');
-      $table->string('text')->comment('ツイート投稿本文');
+      $table->foreignId('user_id')->constrained()->onDelete('cascade')->comment('ユーザID');
+      $table->string('text', 140)->comment('ツイート投稿本文');
       $table->softDeletes();
       $table->timestamps();
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <jet-section-title>
+    <title-section>
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -8,7 +8,7 @@
       <template #description>
         <slot name="description"></slot>
       </template>
-    </jet-section-title>
+    </title-section>
 
     <div>
       <form @submit.prevent="$emit('submitted')">
@@ -17,7 +17,7 @@
         </div>
 
         <div>
-          <slot name="action"></slot>
+          <slot name="actions"></slot>
         </div>
       </form>
     </div>
@@ -25,5 +25,5 @@
 </template>
 
 <script setup lang="ts">
-import JetSectionTitle from "@/Common/TitleSection.vue";
+import TitleSection from "@/Common/TitleSection.vue";
 </script>

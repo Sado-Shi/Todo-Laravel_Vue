@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Twitter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\User;
+use App\Http\Requests\TwitterStoreRequest;
+use App\Models\Twitter\Post;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 
 class TwitterController extends Controller
 {
@@ -16,7 +19,14 @@ class TwitterController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Twitter/Index', ['users' => User::all()]);
+        $user = Auth::user();
+        $posts = $user->posts->all();
+        // TODO Eager Loding対応
+
+        return Inertia::render('Twitter/Index', [
+            'user' => $user,
+            'posts' => $posts
+        ]);
     }
 
     /**
@@ -26,7 +36,9 @@ class TwitterController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Twitter/Create');
+        $user = Auth::user();
+
+        return Inertia::render('Twitter/Create', ['user' => $user]);
     }
 
     /**
@@ -35,9 +47,14 @@ class TwitterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TwitterStoreRequest $request)
     {
-        //
+        Post::create([
+            'user_id' => Auth::id(),
+            'text' => $request->text
+        ]);
+
+        return Redirect::route('twitter.index');
     }
 
     /**

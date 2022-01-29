@@ -14,7 +14,7 @@
     </div>
 
     <div>
-      <Link :href="route('twitter.create')" :data="user">
+      <Link :href="route('twitter.create')">
         <jet-button class="bg-blue-300 hover:bg-blue-400 text-base"
           >ツイートへ</jet-button
         >
@@ -27,6 +27,12 @@
       <ul>
         <li v-for="post in posts" :key="post.id">
           {{ post.text }}
+
+          <Link :href="route('twitter.edit', post.id)">
+            <button>詳細</button>
+          </Link>
+
+          <button @click="deleteTweet(post.id)">削除</button>
         </li>
       </ul>
     </div>
@@ -34,9 +40,11 @@
 </template>
 
 <script setup lang="ts">
+import { Inertia } from "@inertiajs/inertia";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button";
 import { Link } from "@inertiajs/inertia-vue3";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
 
 const props = defineProps<{
   user: {
@@ -45,8 +53,14 @@ const props = defineProps<{
     body: string;
   };
   posts: {
-    text: string;
     id: number;
+    text: string;
   };
 }>();
+
+function deleteTweet(id): void {
+  Inertia.delete(route("twitter.destroy", id), {
+    preserveScroll: true,
+  });
+}
 </script>

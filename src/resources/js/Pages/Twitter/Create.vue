@@ -10,7 +10,6 @@
       <template #title>Tweet</template>
       <template #description>ここで入力してつぶやきます</template>
       <template #form>
-
         <!-- サーバーバリデーション -->
         <p class="text-red-500">{{ $props.errors.text }}</p>
 
@@ -61,7 +60,10 @@ const props = defineProps<{
 }>();
 
 const schema = yup.object({
-  text: yup.string().required("入力必須項目です").max(140, '文字数は140字以内で入力してください'),
+  text: yup
+    .string()
+    .required("入力必須項目です")
+    .max(140, "文字数は140字以内で入力してください"),
 });
 
 const { errors } = useForm({
@@ -70,7 +72,7 @@ const { errors } = useForm({
 
 const { value: text } = useField("text");
 
-function createTweet() {
+function createTweet(): void {
   Inertia.post(route("twitter.store"), { text: text.value });
 }
 </script>

@@ -28,20 +28,22 @@ Route::get('/', function () {
 Route::get('/twitters', [TwitterController::class, 'index'])
     ->name('twitter.index')->middleware('auth');
 
-Route::resource('/twitters', TwitterController::class)
-    ->names([
-        'index' => 'twitter.index',
-        'create' => 'twitter.create',
-        'edit' => 'twitter.edit',
-        'update' => 'twitter.update',
-        'destroy' => 'twitter.destroy',
-        'store' => 'twitter.store'
-    ])
-    ->middleware(['auth']);
+Route::get("/twitters/create", [TwitterController::class, 'create'])->name('twitter.create');
+
+Route::get("/twitters/{post}", [TwitterController::class, 'edit'])->name('twitter.edit');
+
+Route::put("/twitters/{post}", [TwitterController::class, 'update'])->name('twitter.update');
+
+Route::delete("/twitters/{post}", [TwitterController::class, 'destroy'])->name('twitter.destroy');
+
+Route::resource('/twitters', TwitterController::class)->only([
+    'index',
+    'store'
+])->names([
+    'index' => 'twitter.index',
+    'store' => 'twitter.store'
+])->middleware(['auth']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
-
-Route::get('/twitters/create', [TwitterController::class, 'create'])
-    ->name('twitter.create')->middleware('auth');

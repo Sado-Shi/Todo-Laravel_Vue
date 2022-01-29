@@ -9,6 +9,7 @@ use App\Http\Requests\TwitterStoreRequest;
 use App\Models\Twitter\Post;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class TwitterController extends Controller
 {
@@ -21,11 +22,12 @@ class TwitterController extends Controller
     {
         $user = Auth::user();
         $posts = $user->posts->all();
-        // TODO Eager Loding対応
+        // TODO: Eager Loding対応
+        // FIXME: ダッシュボードに飛んじゃう件?
 
         return Inertia::render('Twitter/Index', [
             'user' => $user,
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
 
@@ -51,21 +53,10 @@ class TwitterController extends Controller
     {
         Post::create([
             'user_id' => Auth::id(),
-            'text' => $request->text
+            'text' => $request->text,
         ]);
 
         return Redirect::route('twitter.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -74,9 +65,14 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        $user = Auth::user();
+
+        return Inertia::render('Twitter/Edit', [
+            'post' => $post,
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -86,9 +82,11 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $post->update($request->all());
+
+        return Redirect::route('twitter.edit', $post);
     }
 
     /**
@@ -97,8 +95,10 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return Redirect::route('twitter.index');
     }
 }

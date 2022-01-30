@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\TwitterStoreRequest;
+use App\Http\Requests\TwitterUpdateRequest;
 use App\Models\Twitter\Post;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,7 @@ class TwitterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(TwitterUpdateRequest $request, Post $post)
     {
         $post->update($request->all());
 

@@ -23,8 +23,6 @@ class TwitterController extends Controller
     {
         $user = Auth::user();
         $posts = $user->posts->all();
-        // TODO: Eager Loding対応
-        // FIXME: ダッシュボードに飛んじゃう件?
 
         return Inertia::render('Twitter/Index', [
             'user' => $user,

@@ -7,15 +7,8 @@
   </button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  props: {
-    type: {
-      type: String,
-      default: "submit",
-    },
-  },
-});
+<script setup lang="ts">
+const props = defineProps<{
+  type: "button" | "submit" | "reset" | undefined;
+}>();
 </script>

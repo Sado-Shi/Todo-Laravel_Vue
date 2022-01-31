@@ -70,7 +70,7 @@ const { errors } = useForm({
   validationSchema: schema,
 });
 
-const { value: text } = useField("text");
+const { value: text } = useField<string>("text");
 
 function createTweet(): void {
   Inertia.post(route("twitter.store"), { text: text.value });

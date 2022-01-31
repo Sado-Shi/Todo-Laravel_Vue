@@ -8,20 +8,24 @@
 
     <div>
       <h2>{{ user.account_name }}</h2>
+
       <!-- サーバーバリデーション -->
-      <!-- <p class="text-red-500">{{ $props.errors.text }}</p> -->
+      <p class="text-red-500">{{ $props.errors.text }}</p>
+
       <div v-if="edit">
         <p>{{ post.text }}</p>
         <button @click="activeEdit(false)">編集</button>
         <button @click="deleteTweet(post.id)">削除</button>
       </div>
       <div v-else>
-        <textarea rows="5" cols="25" type="text" v-model="post.text"></textarea>
+        <textarea rows="5" cols="25" type="text" v-model="text"></textarea>
         <button @click="activeEdit(true)">更新</button>
         <button @click="activeEdit(null)">キャンセル</button>
       </div>
+
       <!-- フロントバリデーション -->
-      <!-- <p class="text-red-500">{{ errors.text }}</p> -->
+      <p class="text-red-500">{{ errors.text }}</p>
+
     </div>
   </app-layout>
 </template>
@@ -46,47 +50,45 @@ const props = defineProps<{
     account_name: string;
     text: string;
   };
-  // errors: {
-  //   text: string;
-  // };
+  errors: {
+    text: string;
+  };
 }>();
 
 const edit = ref(true);
-let cancelText = ref("");
 
-function deleteTweet(id): void {
+function deleteTweet(id: number): void {
   Inertia.delete(route("twitter.destroy", id), {
     preserveScroll: true,
   });
 }
 
-function activeEdit(bool): void {
+function activeEdit(bool: boolean | null): void {
   if (bool === false) {
-    cancelText.value = props.post.text;
+    text.value = props.post.text;
     edit.value = bool;
   }
 
   if (bool === true) {
-    Inertia.put(route("twitter.update", props.post.id), props.post);
+    Inertia.put(route("twitter.update", props.post.id), { text: text.value });
     edit.value = true;
   }
 
   if (bool === null) {
-    props.post.text = cancelText.value;
     edit.value = true;
   }
 }
 
-// const schema = yup.object({
-//   text: yup
-//     .string()
-//     .required("入力必須項目です")
-//     .max(140, "文字数は140字以内で入力してください"),
-// });
+const schema = yup.object({
+  text: yup
+    .string()
+    .required("入力必須項目です")
+    .max(140, "文字数は140字以内で入力してください"),
+});
 
-// const { errors } = useForm({
-//   validationSchema: schema,
-// });
+const { errors } = useForm({
+  validationSchema: schema,
+});
 
-// const { value: text } = useField("text");
+const { value: text } = useField<string>("text");
 </script>

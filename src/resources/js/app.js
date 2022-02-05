@@ -1,6 +1,7 @@
 require('./bootstrap');
 
 import { createApp, h } from 'vue';
+import { createPinia } from "pinia";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 

@@ -8,46 +8,41 @@
 
     <div class="p-8 max-w-7xl mr-auto ml-auto">
       <div class="flex items-center justify-between">
-        <Icon :src="user.profile_image" />
+        <Icon class="w-24 h-24" :src="user.profile_image" />
         <profile-edit type="button"> プロフィールを編集 </profile-edit>
       </div>
 
       <div class="py-4">
-        <h1><strong>{{ user.account_name }}</strong></h1>
+        <h1>
+          <strong>{{ user.account_name }}</strong>
+        </h1>
         <p>{{ user.body }}</p>
       </div>
 
-      <div>
+      <div class="pb-4">
         <Link :href="route('twitter.create')">
-          <jet-button class="bg-blue-300 hover:bg-blue-400 text-base"
+          <jet-button class="bg-[#3296CE] hover:bg-blue-400 text-base"
             >ツイートへ</jet-button
           >
         </Link>
       </div>
 
-      <div class="py-4">
-        <h2>ツイート一覧</h2>
-
-        <ul>
-          <li v-for="post in posts" :key="post.id">
-            {{ post.text }}
-
-            <Link :href="route('twitter.edit', post.id)">
-              <button>詳細</button>
-            </Link>
-
-            <button @click="deleteTweet(post.id)">削除</button>
-          </li>
-        </ul>
-      </div>
+      <TabList :labels="labels" :posts="posts" :user="user">
+        <!-- // TODO ここに各コンテンツを入れて渡す-->
+        <template #tweets> <TweetList :user="user" :posts="posts" /> </template>
+        <template #comments> bbbb </template>
+        <template #likes> ccc </template>
+        <template #timelines> ddd </template>
+      </TabList>
     </div>
   </app-layout>
 </template>
 
 <script setup lang="ts">
-import { Inertia } from "@inertiajs/inertia";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileEdit from "@/Common/ProfileEdit.vue";
+import TabList from "./TabList.vue";
+import TweetList from "./TweetList.vue";
 import Icon from "@/Common/Icon.vue";
 import JetButton from "@/Jetstream/Button";
 import { Link } from "@inertiajs/inertia-vue3";
@@ -68,11 +63,10 @@ const props = defineProps<{
   posts: Post[];
 }>();
 
-function deleteTweet(id: number): void {
-  Inertia.delete(route("twitter.destroy", id), {
-    preserveScroll: true,
-  });
-}
+const labels = [
+  { label: "ツイート", id: "tweets" },
+  { label: "ツイートと返信", id: "comments" },
+  { label: "いいね", id: "likes" },
+  { label: "タイムライン", id: "timelines" },
+];
 </script>
-
-<style scoped></style>

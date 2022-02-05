@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Twitter\TwitterController;
+use App\Http\Controllers\Practice\PracticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,9 @@ Route::get('/', function () {
 
 Route::get('/twitters', [TwitterController::class, 'index'])
     ->name('twitter.index')->middleware('auth');
+
+Route::get('/practice', [PracticeController::class, 'index'])
+    ->name('practice.index')->middleware('auth');
 
 Route::get("/twitters/create", [TwitterController::class, 'create'])->name('twitter.create');
 

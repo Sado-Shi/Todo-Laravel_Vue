@@ -1,10 +1,8 @@
 <template>
-  <div>
     <img
       :src="src"
-      class="w-24 h-24 rounded-full"
+      class="rounded-full"
     />
-  </div>
 </template>
 
 <script setup lang="ts">

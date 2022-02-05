@@ -11,19 +11,27 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.ts('resources/js/app.js', 'public/js').vue()
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-    ])
-    .webpackConfig(require('./webpack.config'));
+mix.ts('resources/js/app.js', 'public/js', {
+  transpileOnly: true
+}).vue()
+  .postCss('resources/css/app.css', 'public/css', [
+    require('postcss-import'),
+    require('tailwindcss'),
+  ])
+  .webpackConfig(require('./webpack.config'));
+  // .browserSync({
+  //   files: [
+  //     './resources/**/*',
+  //     './app/**/*',
+  //     './config/**/*',
+  //     './routes/**/*',
+  //     './public/**/*'
+  //   ],
+  //   proxy: {
+  //     target: "http://localhost/",
+  //   }
+  // });
 
 if (mix.inProduction()) {
-    mix.version();
+  mix.version();
 }
-
-// mix.browserSync({
-//   proxy: '127.0.0.1',
-//   host: '127.0.0.1',
-//   open: 'external'
-// });

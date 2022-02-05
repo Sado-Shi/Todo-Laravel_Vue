@@ -18,26 +18,41 @@
         <button @click="deleteTweet(post.id)">削除</button>
       </div>
       <div v-else>
-        <textarea rows="5" cols="25" type="text" v-model="text"></textarea>
-        <button @click="activeEdit(true)">更新</button>
+        <textarea
+          rows="5"
+          cols="25"
+          type="text"
+          v-model="v$.text.$model"
+        ></textarea>
+        <button :disabled="v$.$invalid" @click="activeEdit(true)">更新</button>
         <button @click="activeEdit(null)">キャンセル</button>
       </div>
 
       <!-- フロントバリデーション -->
-      <p class="text-red-500">{{ errors.text }}</p>
-
+      <div v-if="{ error: v$.text.$errors.length }">
+        <div
+          class="input-errors"
+          v-for="error of v$.text.$errors"
+          :key="error.$uid"
+        >
+          <div v-if="error.$validator == 'required'">入力してください</div>
+          <div v-if="error.$validator == 'maxLength'">
+            140文字以下で入力して下さい
+          </div>
+        </div>
+      </div>
     </div>
   </app-layout>
 </template>
 
 <script setup lang="ts">
 import { Inertia } from "@inertiajs/inertia";
-import { useField, useForm } from "vee-validate";
-import * as yup from "yup";
+import useVuelidate from "@vuelidate/core";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button";
 import { Link } from "@inertiajs/inertia-vue3";
 import { ref, reactive } from "vue";
+import { required, maxLength } from "@vuelidate/validators";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 
 const props = defineProps<{
@@ -55,7 +70,7 @@ const props = defineProps<{
   };
 }>();
 
-const edit = ref(true);
+const edit = ref<boolean>(true);
 
 function deleteTweet(id: number): void {
   Inertia.delete(route("twitter.destroy", id), {
@@ -65,12 +80,14 @@ function deleteTweet(id: number): void {
 
 function activeEdit(bool: boolean | null): void {
   if (bool === false) {
-    text.value = props.post.text;
+    v$.value.text.$model = props.post.text;
     edit.value = bool;
   }
 
   if (bool === true) {
-    Inertia.put(route("twitter.update", props.post.id), { text: text.value });
+    Inertia.put(route("twitter.update", props.post.id), {
+      text: v$.value.text.$model,
+    });
     edit.value = true;
   }
 
@@ -79,16 +96,17 @@ function activeEdit(bool: boolean | null): void {
   }
 }
 
-const schema = yup.object({
-  text: yup
-    .string()
-    .required("入力必須項目です")
-    .max(140, "文字数は140字以内で入力してください"),
+const state = reactive({
+  text: "",
 });
 
-const { errors } = useForm({
-  validationSchema: schema,
-});
+const rules = {
+  text: {
+    required,
+    maxLength: maxLength(140),
+  },
+};
 
-const { value: text } = useField<string>("text");
+const v$ = useVuelidate(rules, state);
+console.log(v$.value);
 </script>

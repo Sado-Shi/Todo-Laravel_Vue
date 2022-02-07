@@ -30,9 +30,9 @@
       <TabList :labels="labels" :posts="posts" :user="user">
         <!-- // TODO ここに各コンテンツを入れて渡す-->
         <template #tweets> <TweetList :user="user" :posts="posts" /> </template>
-        <template #comments> bbbb </template>
-        <template #likes> ccc </template>
-        <template #timelines> ddd </template>
+        <template #comments> ツイートとコメント </template>
+        <template #likes> いいね </template>
+        <template #timelines> タイムライン </template>
       </TabList>
     </div>
   </app-layout>

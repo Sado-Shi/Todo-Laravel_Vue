@@ -2,8 +2,13 @@
   <!-- ナビゲーション -->
   <nav class="max-w-7xl mr-auto ml-auto">
     <ul class="px-16 flex items-center justify-between">
-      <li v-for="{ label, id } in labels" :key="id" @click="current = id">
-        {{ label }}
+      <li
+        v-for="{ label, id } in labels"
+        :key="id"
+        @click="current = id"
+        class="cursor-pointer flex-1 text-center py-4 hover:bg-gray-300 focus"
+      >
+        <a>{{ label }}</a>
       </li>
     </ul>
   </nav>

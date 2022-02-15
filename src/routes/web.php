@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Twitter\TwitterController;
 use App\Http\Controllers\Practice\PracticeController;
+use App\Http\Controllers\TypeScript\TypeScriptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,9 @@ Route::get('/twitters', [TwitterController::class, 'index'])
 
 Route::get('/practice', [PracticeController::class, 'index'])
     ->name('practice.index')->middleware('auth');
+
+Route::get('/typescript', [TypeScriptController::class, 'index'])
+    ->name('typescript.index')->middleware('auth');
 
 Route::get("/twitters/create", [TwitterController::class, 'create'])->name('twitter.create');
 

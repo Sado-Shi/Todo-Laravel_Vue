@@ -91,4 +91,6 @@ let hello = "hello";
 console.log(hello.toUpperCase());
 
 let testest = 'aaagrre';
+let testest = 'aaagrre';
+let testest = 'aaagrre';
 </script>

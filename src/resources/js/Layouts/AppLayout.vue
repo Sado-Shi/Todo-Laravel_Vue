@@ -33,11 +33,18 @@
                   Twitter
                 </jet-nav-link>
 
-                 <jet-nav-link
+                <jet-nav-link
                   :href="route('practice.index')"
                   :active="route().current('practice.index')"
                 >
                   Practice
+                </jet-nav-link>
+
+                <jet-nav-link
+                  :href="route('typescript.index')"
+                  :active="route().current('typescript.index')"
+                >
+                  TypeScript
                 </jet-nav-link>
               </div>
             </div>

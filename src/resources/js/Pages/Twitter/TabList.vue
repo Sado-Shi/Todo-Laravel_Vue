@@ -5,10 +5,14 @@
       <li
         v-for="{ label, id } in labels"
         :key="id"
-        @click="current = id"
-        class="cursor-pointer flex-1 text-center py-4 hover:bg-gray-300 focus"
+        @click="current = id; focusTab(id)"
+        class="cursor-pointer flex-1 text-center py-4 hover:bg-gray-300"
       >
-        <a>{{ label }}</a>
+        <a :class="{'font-bold': isActive === id }">{{ label }}</a>
+        <div
+          v-if="isActive === id"
+          class="bg-cyan-500 h-1 w-32 mx-auto mt-2"
+        ></div>
       </li>
     </ul>
   </nav>
@@ -42,4 +46,11 @@ const props = defineProps<{
 }>();
 
 const current = ref(props.labels[0].id);
+
+const isActive = ref(null);
+
+function focusTab(id) {
+  isActive.value = id;
+}
+
 </script>

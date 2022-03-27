@@ -16,8 +16,6 @@ class PracticeController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Practice/Index', [
-
-        ]);
+        return Inertia::render('Practice/Index', []);
     }
 }

@@ -13,8 +13,15 @@ class Post extends Model
         'user_id'
     ];
 
+    protected $hidden = ['deleted_at', 'updated_at', 'created_at'];
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Twitter\Like');
     }
 }

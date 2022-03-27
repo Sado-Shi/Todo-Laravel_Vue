@@ -5,90 +5,150 @@
         TypeScript Top
       </h2>
     </template>
+    <!-- <SectionOne :open="open" /> -->
+
+    <div class="m-5">
+      <label class="inline-flex items-center">
+        <input v-model="isCheck" type="checkbox" class="peer sr-only" />
+        <span
+          class="block w-[2em] cursor-pointer bg-gray-500 rounded-full p-[1px] after:block after:h-[1em] after:w-[1em] after:rounded-full after:bg-white after:transition peer-checked:bg-blue-500 peer-checked:after:translate-x-[calc(100%-2px)]"
+        >
+        </span>
+        {{ isCheck }}
+      </label>
+
+      <label class="inline-flex items-center">
+        <input v-model="isCheck2" type="checkbox" class="peer sr-only" />
+        <span
+          class="block w-[2em] cursor-pointer bg-gray-500 rounded-full p-[1px] after:block after:h-[1em] after:w-[1em] after:rounded-full after:bg-white after:transition peer-checked:bg-blue-500 peer-checked:after:translate-x-[calc(100%-2px)]"
+        >
+        </span>
+        {{ isCheck2 }}
+      </label>
+    </div>
   </app-layout>
 </template>
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { toUpper } from "lodash";
+import { first } from "lodash";
+import SectionOne from "./SectionOne.vue";
 
-let hasValue = true;
-let count: number = 10;
-const float: number = 3.45;
-const back: string = `aaa`;
+import { ref } from "vue";
 
-const person = {
-  name: {
-    first: "nonnpi",
-    last: "sonoda",
-  },
-  age: 27,
+const open = ref(true);
+
+const isCheck = ref(false);
+const isCheck2 = ref(false);
+// type Pokemon = {
+//   name: string;
+//   age: number;
+//   weight: Number;
+//   type: string;
+//   skill: (action: string) => void;
+// };
+
+// interface Pokemon {
+//   name: string;
+//   age: number;
+//   weight: Number;
+//   type: string;
+//   skill(act: string): void;
+// }
+
+// const pokemon = {
+//   name: "kabigon",
+//   age: 40,
+//   weight: 500,
+//   type: "normal",
+//   skill(action: string = "add") {
+//
+//     const act = action;
+//   },
+// };
+
+// pokemon.skill("initial");
+
+type Engineer = {
+  name: string;
+  role: string;
+  afaf: string;
 };
 
-// ユニオン型 or any型
-let fruits = ["banana", "grape", "apple", 1];
-
-// tuple型
-const book: [string, number, boolean] = ["business", 1700, true];
-
-// Enum(列挙型)
-enum PokemonType {
-  HI,
-  MIZU,
-  KAMINARI,
-  POISON,
-}
-
-const pokemon = {
-  type: PokemonType.POISON,
-  sex: "men",
+type Blogger = {
+  name: string;
+  follower: number;
 };
 
-pokemon.type = PokemonType.HI;
+type EngineerBlogger = Engineer & Blogger;
+const Quill: EngineerBlogger = {
+  name: "Quill",
+  role: "front-end",
+  follower: 45,
+};
 
-// any型
-let anything: any = true;
-anything = "hello";
-
-let union: string | number = "string";
-let unions: (string | number)[] = ["string"];
-
-console.log(union.toUpperCase());
-
-let abc: 'aaa' | 'bbb' | 'ccc' = 'bbb'
-
-type size = 'aaa' | 'bbb' | 'ccc';
-let test: size ='aaa'
-
-function add(num1: number,  num2: number): number {
-  return num1 + num2;
+// タイプガード①
+function toUpperCase(x: string | number) {
+  if (typeof x === "string") {
+    x.toUpperCase();
+  }
+  return "";
 }
 
-console.log(add(1, 1));
-
-const none: null = undefined;
-
-const anotherAdd: (n1: number, n2: number) => number = add
-
-function pokemonNumber(n1: number, cb: (num: number) => void):void {
-  const doublePokemon = cb(n1 * 2);
-  console.log(doublePokemon);
+type NomadWorker = Blogger | Engineer;
+function describeProfile(nomadWorker: NomadWorker) {
+  nomadWorker.name;
+  // タイプガード②
+  if ("afaf" in nomadWorker) {
+    nomadWorker.role;
+  }
+  if ("follower" in nomadWorker) {
+    nomadWorker.follower;
+  }
 }
 
-pokemonNumber(2, doublePokemon => {
-  return doublePokemon;
-})
+// タイプガード③ = instanceOf
 
-let unknownInput: unknown = 'aa'
+type DownloadData = {
+  id: number;
+  user?: {
+    name?: {
+      first: string;
+      last: string;
+    };
+  };
+};
 
-let text: string = "aaa";
-if (typeof unknownInput === 'string') {
-  text = unknownInput;
-  console.log(text);
+const downloadData: DownloadData = {
+  id: 1,
+};
+
+console.log(downloadData.user?.name?.first);
+const userData = downloadData.user ?? "no-user";
+
+type test = DownloadData["id" | "user"];
+
+function advancedFn(...args: [number, string, boolean?, ...number[]]) {}
+
+advancedFn(1, "hi");
+
+const pokemon = ["pika", "zeni"] as const;
+
+type PokemonType = typeof pokemon;
+
+// ジェネリクス
+function copy<T>(value: T): T {
+  return value;
+}
+console.log(copy<string>("a"));
+
+interface Todo {
+  title: string;
+  text: string;
 }
 
-let hello = "hello";
-console.log(hello.toUpperCase());
-
-// test追加aaabbbcc
+// 全部オプショナルにしてくれる
+type Todoable = Partial<Todo>;
+// 全部readonlyに
+type ReadTodo = Readonly<Todo>;
 </script>

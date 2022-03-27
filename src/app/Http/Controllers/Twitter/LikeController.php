@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Twitter;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\Twitter\Post;
+use App\Models\User;
+use App\Models\Twitter\Like;
+use Illuminate\Support\Facades\Auth;
 
 class LikeController extends Controller
 {
@@ -12,74 +16,42 @@ class LikeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Post $post)
     {
-        //
+        $likes = Like::with('user:id,account_name,body,profile_image')->where('post_id', $post->id)->get(['id', 'post_id', 'user_id']);
+
+        return Inertia::render('Twitter/LikedUser', [
+            'post' => $post,
+            'likes' => $likes,
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * いいねがついていない場合、追加
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function store(Post $post)
     {
-        //
+        Like::create([
+            'user_id' => Auth::id(),
+            'post_id' => $post->id,
+        ]);
+
+        return redirect()->back();
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * いいねがついていた場合、削除
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function destroy(Post $post)
     {
-        //
-    }
+        Like::where('post_id', $post->id)->where('user_id', Auth::id())->first()->delete();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->back();
     }
 }

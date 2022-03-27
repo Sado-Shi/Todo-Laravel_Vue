@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Twitter\Post');
     }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Twitter\Like');
+    }
 }

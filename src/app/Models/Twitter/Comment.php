@@ -8,10 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-  use HasFactory;
-  use SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
-  protected $fillable = [
-    'text',
-  ];
+    protected $fillable = [
+        'user_id',
+        'post_id',
+        'text',
+    ];
+
+    public function post()
+    {
+        return $this->belongsTo('App\Models\Twitter\Post');
+    }
 }

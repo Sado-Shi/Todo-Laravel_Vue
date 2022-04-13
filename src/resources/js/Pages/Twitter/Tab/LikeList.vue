@@ -1,58 +1,61 @@
 <template>
-  <ul>
-    <li
-      class="flex mb-8 first:pt-0 pt-8 border-t first:border-0"
-      v-for="post in sortedByPosts"
-    >
-      <Icon class="w-16 h-16" :src="post.user.profile_image" />
+  <section>
+    <ul>
+      <li
+        class="flex mb-8 first:pt-0 pt-8 border-t first:border-0"
+        v-for="post in sortedByPosts"
+      >
+        <Icon class="w-16 h-16" :src="post.user.profile_image" />
 
-      <div class="ml-4 w-full">
-        <div class="flex justify-between">
-          <div>
-            <strong>{{ post.user.account_name }}</strong>
-          </div>
+        <div class="ml-4 w-full">
+          <div class="flex justify-between">
+            <div>
+              <strong>{{ post.user.account_name }}</strong>
+            </div>
 
-          <div class="flex">
-            <Link :href="route('twitter.edit', post.id)">
-              <button class="flex items-center">
+            <div class="flex">
+              <Link :href="route('twitter.edit', post.id)">
+                <button class="flex items-center">
+                  <Iconify
+                    icon="bx:bx-comment-detail"
+                    color="#afafaf"
+                    height="24"
+                  />
+                </button>
+              </Link>
+
+              <button class="flex items-center ml-2">
                 <Iconify
                   v-if="post.user_id === currentUser.id"
-                  icon="bx:bx-comment-detail"
+                  icon="fluent:delete-20-regular"
                   color="#afafaf"
                   height="24"
+                  @click="deleteTweet(post.id)"
                 />
               </button>
-            </Link>
+            </div>
+          </div>
 
-            <button class="flex items-center ml-2">
-              <Iconify
-                v-if="post.user_id === currentUser.id"
-                icon="fluent:delete-20-regular"
-                color="#afafaf"
-                height="24"
-                @click="deleteTweet(post.id)"
-              />
+          <div>
+            <p>{{ post.text }}</p>
+          </div>
+
+          <!-- リプライ -->
+          <div class="flex">
+            <PostCommentDisplay :user="currentUser" :post="post" />
+            {{ post.comment_count }}
+            <!-- リツイート -->
+            <button class="ml-3">
+              <Iconify class="text-2xl" :icon="retweetIcon" />
             </button>
+
+            <Like :post="post" />
+            <span class="ml-1">{{ post.count }}</span>
           </div>
         </div>
-
-        <div>
-          <p>{{ post.text }}</p>
-        </div>
-
-        <!-- リプライ -->
-        <button><Iconify class="text-2xl" :icon="commentIcon" /></button>
-        <!-- リツイート -->
-        <button class="ml-3">
-          <Iconify class="text-2xl" :icon="retweetIcon" />
-        </button>
-
-        <Like :post="post" />
-
-        <span class="ml-1">{{ post.count }}</span>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -66,12 +69,14 @@ import commentIcon from "@iconify-icons/ei/comment";
 import retweetIcon from "@iconify-icons/system-uicons/retweet";
 import { computed } from "vue";
 import Like from "../Components/Like.vue";
+import PostCommentDisplay from "../Components/PostCommentDisplay.vue";
 
 type Post = {
   id: number;
   user_id: number;
   text: string;
   count: number;
+  comment_count: number;
   is_liked: number;
   user: {
     account_name: string;

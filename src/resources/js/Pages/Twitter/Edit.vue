@@ -1,28 +1,50 @@
 <script setup lang="ts">
+import { Icon as Iconify } from "@iconify/vue";
+import retweetIcon from "@iconify-icons/system-uicons/retweet";
+
 import { Inertia } from "@inertiajs/inertia";
-import useVuelidate from "@vuelidate/core";
-import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button";
-import { Link } from "@inertiajs/inertia-vue3";
 import { ref, reactive } from "vue";
-import { required, maxLength } from "@vuelidate/validators";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
+import useVuelidate from "@vuelidate/core";
+import { required, maxLength } from "@vuelidate/validators";
+
+import AppLayout from "@/Layouts/AppLayout.vue";
 import CountLike from "./Components/CountLike.vue";
+import Icon from "@/Common/Icon.vue";
+import Like from "./Components/Like.vue";
+import PostCommentDisplay from "./Components/PostCommentDisplay.vue";
+import CommentDisplay from "./Components/CommentDisplay.vue";
 
 const props = defineProps<{
   post: {
     id: number;
     text: string;
+    user_id: number;
+    count: number;
+    is_liked: number;
+    user: {
+      account_name: string;
+      profile_image: String;
+    };
   };
   user: {
     id: number;
     account_name: string;
-    text: string;
+    body: string;
+    profile_image: String;
   };
   likes: {
     id: number;
     user_id: number;
     post_id: number;
+  }[];
+  comments: {
+    id: number;
+    user_id: number;
+    post_id: number;
+    text: string;
+    user_name: string;
+    user_image: string;
   }[];
   errors: {
     text: string;
@@ -78,17 +100,33 @@ const v$ = useVuelidate(rules, state);
     </template>
 
     <div>
-      <h2>{{ user.account_name }}</h2>
+      <Icon class="w-24 h-24" :src="post.user.profile_image" />
+      <h2>{{ post.user.account_name }}</h2>
 
       <!-- サーバーバリデーション -->
       <p class="text-red-500">{{ $props.errors.text }}</p>
 
       <div v-if="edit">
         <p>{{ post.text }}</p>
-        <button @click="activeEdit(false)">編集</button>
-        <button @click="deleteTweet(post.id)">削除</button>
+        <button v-if="post.user_id === user.id" @click="activeEdit(false)">
+          編集
+        </button>
+        <button v-if="post.user_id === user.id" @click="deleteTweet(post.id)">
+          削除
+        </button>
 
-        <CountLike :likes="likes" :post="post" />
+        <div class="flex">
+          <!-- 投稿に対するリプライ -->
+          <PostCommentDisplay :user="user" :post="post" />
+          {{ comments.length }}
+          <!-- リツイート -->
+          <button class="ml-3">
+            <Iconify class="text-2xl" :icon="retweetIcon" />
+          </button>
+
+          <Like :post="post" />
+          <CountLike :likes="likes" :post="post" />
+        </div>
       </div>
       <div v-else>
         <textarea
@@ -113,6 +151,19 @@ const v$ = useVuelidate(rules, state);
             140文字以下で入力して下さい
           </div>
         </div>
+      </div>
+
+      <div v-if="comments">
+        <ul v-for="comment of comments" :key="comment.id">
+          <Icon class="w-24 h-24" :src="comment.user_image" />
+          <li>{{ comment.user_name }}</li>
+          <h4>返信先: {{ post.user.account_name }}さん</h4>
+          <li>{{ comment.text }}</li>
+          <div class="flex">
+            <!-- コメントに対するリプライ -->
+            <!-- <CommentDisplay :user="user" :post="post" :comment="comment" /> -->
+          </div>
+        </ul>
       </div>
     </div>
   </app-layout>

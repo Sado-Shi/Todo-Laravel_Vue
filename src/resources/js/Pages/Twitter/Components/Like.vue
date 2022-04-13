@@ -12,7 +12,7 @@ type Post = {
   text: string;
   count: number;
   is_liked: number;
-  user: {
+  user?: {
     account_name: string;
     profile_image: String;
   };

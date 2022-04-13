@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Twitter\TwitterController;
 use App\Http\Controllers\Twitter\LikeController;
 use App\Http\Controllers\Practice\PracticeController;
+use App\Http\Controllers\Twitter\CommentController;
 use App\Http\Controllers\TypeScript\TypeScriptController;
 
 /*
@@ -35,6 +36,8 @@ Route::get('/twitters', [TwitterController::class, 'index'])
 Route::put("/twitters", [TwitterController::class, 'profileUpdate'])->name('twitter.profile.update');
 
 Route::post('/twitters/fileupload', [TwitterController::class, 'fileUpload'])->name('twitter.fileupload');
+
+Route::post('/twitters/comment/store', [CommentController::class, 'store'])->name('twitter.comment.store');
 
 Route::get('/practice', [PracticeController::class, 'index'])
     ->name('practice.index')->middleware('auth');

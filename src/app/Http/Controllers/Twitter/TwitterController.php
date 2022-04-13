@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Http\Requests\TwitterStoreRequest;
 use App\Http\Requests\TwitterUpdateRequest;
 use App\Http\Requests\TwitterProfileUpdateRequest;
+use App\Models\Twitter\Comment;
 use App\Models\Twitter\Like;
 use App\Models\User;
 use App\Models\Twitter\Post;
@@ -26,11 +27,11 @@ class TwitterController extends Controller
     {
         $current_user = Auth::user();
 
-        $new_post = new Post();
-
         $count_like = DB::table('likes')
             ->selectRaw('post_id, count(*) as `count`')
             ->groupBy('post_id');
+
+        $new_post = new Post();
 
         // 全ての投稿とそれにログインユーザがいいねしているか(タイムライン)
         $posts = $new_post->newQuery()
@@ -51,6 +52,11 @@ class TwitterController extends Controller
 
         // リレーション
         $posts->load('user');
+
+        // 投稿に紐づくコメント数を取得
+        $posts->each(function ($post) {
+            $post->comment_count = $post->comments()->count();
+        });
 
         return Inertia::render('Twitter/Index', [
             'current_user' => $current_user,
@@ -98,10 +104,32 @@ class TwitterController extends Controller
 
         $likes = Like::where('post_id', $post->id)->get();
 
+        // 自分がいいねしているかどうかのデータを保存
+        foreach ($likes as $like) {
+            if ($like->user_id === $user->id) {
+                $post['is_liked'] = 1;
+            } else {
+                $post['is_liked'] = 0;
+            }
+        }
+
+        // いいね数
+        $post['count'] = count($likes);
+        $post->load('user');
+
+        // Postに紐づくCommentを取得
+        $comments = Comment::where('post_id', $post->id)->get()->toArray();
+        // コメントしたユーザ名とプロフィール画像を追加
+        foreach ($comments as $key => $comment) {
+            $comments[$key]['user_name'] = User::where('id', $comment['user_id'])->first()->account_name;
+            $comments[$key]['user_image'] = User::where('id', $comment['user_id'])->first()->profile_image;
+        }
+
         return Inertia::render('Twitter/Edit', [
             'post' => $post,
             'user' => $user,
             'likes' => $likes,
+            'comments' => $comments,
         ]);
     }
 

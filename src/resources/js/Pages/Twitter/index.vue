@@ -9,12 +9,14 @@ import { Link } from "@inertiajs/inertia-vue3";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 import TimeLine from "./Tab/TimeLine.vue";
 import LikeList from "./Tab/LikeList.vue";
+import CommentList from "./Tab/CommentList.vue";
 
 type Post = {
   id: number;
   user_id: number;
   text: string;
   count: number;
+  comment_count: number;
   is_liked: number;
   user: {
     account_name: string;
@@ -77,7 +79,9 @@ const labels = [
         <template #tweets>
           <TweetList :currentUser="current_user" :posts="posts" />
         </template>
-        <template #comments> ツイートとコメント </template>
+        <template #comments>
+          <CommentList :currentUser="current_user" :posts="posts" />
+        </template>
         <template #likes>
           <LikeList :currentUser="current_user" :posts="posts" />
         </template>

@@ -24,4 +24,9 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\Twitter\Like');
     }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Twitter\Comment');
+    }
 }

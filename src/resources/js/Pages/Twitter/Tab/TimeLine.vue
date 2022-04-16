@@ -11,16 +11,30 @@ import Like from "../Components/Like.vue";
 import PostCommentDisplay from "../Components/PostCommentDisplay.vue";
 
 type Post = {
-  id: number;
-  user_id: number;
-  text: string;
-  count: number;
-  comment_count: number;
-  is_liked: number;
-  user: {
-    account_name: string;
-    profile_image: String;
-  };
+  current_page: number;
+  first_page_url: string;
+  from: number;
+  next_page_url: string;
+  last_page: number;
+  last_page_url: string;
+  path: string;
+  links: {
+    url: string;
+    active: boolean;
+    label: string;
+  }[];
+  data: {
+    id: number;
+    user_id: number;
+    text: string;
+    count: number;
+    comment_count: number;
+    is_liked: number;
+    user: {
+      account_name: string;
+      profile_image: String;
+    };
+  }[];
 };
 
 type CurrentUser = {
@@ -34,6 +48,8 @@ const props = defineProps<{
   currentUser: CurrentUser;
   posts: Post[];
 }>();
+
+console.log(props);
 
 function deleteTweet(id: number): void {
   if (confirm("削除してよろしいですか？")) {
@@ -50,11 +66,10 @@ function deleteTweet(id: number): void {
     <ul>
       <li
         class="flex mb-8 first:pt-0 pt-8 border-t first:border-0"
-        v-for="post in posts"
+        v-for="post in posts.data"
         :key="post.id"
       >
         <Icon class="w-16 h-16" :src="post.user.profile_image" />
-
         <div class="ml-4 w-full">
           <div class="flex justify-between">
             <div>
@@ -107,5 +122,19 @@ function deleteTweet(id: number): void {
         </div>
       </li>
     </ul>
+
+    <div>
+      <ul class="flex items-center">
+        <li v-for="link in posts.links">
+          <button
+            :disabled="link.active"
+            @click="Inertia.get(link.url)"
+            :class="{ 'font-bold border-b-4  border-blue-500': link.active }"
+            class="ml-2"
+            v-html="link.label"
+          ></button>
+        </li>
+      </ul>
+    </div>
   </section>
 </template>

@@ -104,10 +104,10 @@ function deleteTweet(id: number): void {
   }
 }
 
-const sortedByPosts = computed(() => {
-  const likedPost = props.posts.filter((post) => post.is_liked === 1);
-  return likedPost.sort((a, b) => {
-    return b.id - a.id;
-  });
-});
+// const sortedByPosts = computed(() => {
+//   const likedPost = props.posts.filter((post) => post.is_liked === 1);
+//   return likedPost.sort((a, b) => {
+//     return b.id - a.id;
+//   });
+// });
 </script>

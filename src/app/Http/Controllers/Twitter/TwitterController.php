@@ -12,12 +12,19 @@ use App\Models\Twitter\Comment;
 use App\Models\Twitter\Like;
 use App\Models\User;
 use App\Models\Twitter\Post;
+use App\Services\PostService;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class TwitterController extends Controller
 {
+    private $post_service;
+
+    public function __construct(PostService $post_service)
+    {
+        $this->post_service = $post_service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,40 +34,11 @@ class TwitterController extends Controller
     {
         $current_user = Auth::user();
 
-        $count_like = DB::table('likes')
-            ->selectRaw('post_id, count(*) as `count`')
-            ->groupBy('post_id');
-
-        $new_post = new Post();
-
-        // 全ての投稿とそれにログインユーザがいいねしているか(タイムライン)
-        $posts = $new_post->newQuery()
-            ->leftJoin('likes', function ($query) use ($current_user) {
-                // いいねされた状態のものを結合
-                // 結合前の結合条件を指定
-                $query->on('posts.id', '=', 'likes.post_id');
-                // 結合後の条件でデータ絞り込み
-                // （ログインしているユーザのいいね）
-                $query->where('likes.user_id', $current_user->id);
-            })
-            ->leftJoinSub($count_like, 'count_like', function ($join) {
-                $join->on('posts.id', '=', 'count_like.post_id');
-            })
-            ->selectRaw('posts.*, IFNULL(count_like.`count`, 0) as `count`, posts.id = IFNULL(likes.post_id, 0) as is_liked')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // リレーション
-        $posts->load('user');
-
-        // 投稿に紐づくコメント数を取得
-        $posts->each(function ($post) {
-            $post->comment_count = $post->comments()->count();
-        });
-
         return Inertia::render('Twitter/Index', [
             'current_user' => $current_user,
-            'posts' => $posts,
+            'all_posts'    => $this->post_service->getAllPost($current_user),
+            'my_posts'     => $this->post_service->getMyPost($current_user),
+            'liked_posts'  => $this->post_service->getLikedPost($current_user),
         ]);
     }
 

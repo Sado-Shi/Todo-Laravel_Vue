@@ -12,16 +12,30 @@ import LikeList from "./Tab/LikeList.vue";
 import CommentList from "./Tab/CommentList.vue";
 
 type Post = {
-  id: number;
-  user_id: number;
-  text: string;
-  count: number;
-  comment_count: number;
-  is_liked: number;
-  user: {
-    account_name: string;
-    profile_image: String;
-  };
+  current_page: number;
+  first_page_url: string;
+  from: number;
+  next_page_url: string;
+  last_page: number;
+  last_page_url: string;
+  path: string;
+  links: {
+    url: string;
+    active: boolean;
+    label: string;
+  }[];
+  data: {
+    id: number;
+    user_id: number;
+    text: string;
+    count: number;
+    comment_count: number;
+    is_liked: number;
+    user: {
+      account_name: string;
+      profile_image: String;
+    };
+  }[];
 };
 
 type CurrentUser = {
@@ -33,7 +47,9 @@ type CurrentUser = {
 
 const props = defineProps<{
   current_user: CurrentUser;
-  posts: Post[];
+  all_posts: Post[];
+  my_posts: Post[];
+  liked_posts: Post[];
 }>();
 
 const labels = [
@@ -77,16 +93,16 @@ const labels = [
 
       <TabList :labels="labels">
         <template #tweets>
-          <TweetList :currentUser="current_user" :posts="posts" />
+          <TweetList :currentUser="current_user" :posts="my_posts" />
         </template>
         <template #comments>
-          <CommentList :currentUser="current_user" :posts="posts" />
+          <CommentList :currentUser="current_user" :posts="my_posts" />
         </template>
         <template #likes>
-          <LikeList :currentUser="current_user" :posts="posts" />
+          <LikeList :currentUser="current_user" :posts="liked_posts" />
         </template>
         <template #timelines>
-          <TimeLine :currentUser="current_user" :posts="posts" />
+          <TimeLine :currentUser="current_user" :posts="all_posts" />
         </template>
       </TabList>
     </div>

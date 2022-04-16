@@ -1372,6 +1372,9 @@ select {
 .border-r {
   border-right-width: 1px;
 }
+.border-b-4 {
+  border-bottom-width: 4px;
+}
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -1398,6 +1401,10 @@ select {
 .border-black {
   --tw-border-opacity: 1;
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+.border-blue-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity));
 }
 .bg-white {
   --tw-bg-opacity: 1;
@@ -2381,3 +2388,4 @@ select {
     padding-right: 2rem;
   }
 }
+

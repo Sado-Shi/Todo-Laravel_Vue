@@ -12,16 +12,30 @@ import Like from "../Components/Like.vue";
 import PostCommentDisplay from "../Components/PostCommentDisplay.vue";
 
 type Post = {
-  id: number;
-  user_id: number;
-  text: string;
-  count: number;
-  comment_count: number;
-  is_liked: number;
-  user: {
-    account_name: string;
-    profile_image: String;
-  };
+  current_page: number;
+  first_page_url: string;
+  from: number;
+  next_page_url: string;
+  last_page: number;
+  last_page_url: string;
+  path: string;
+  links: {
+    url: string;
+    active: boolean;
+    label: string;
+  }[];
+  data: {
+    id: number;
+    user_id: number;
+    text: string;
+    count: number;
+    comment_count: number;
+    is_liked: number;
+    user: {
+      account_name: string;
+      profile_image: String;
+    };
+  }[];
 };
 
 type CurrentUser = {
@@ -45,10 +59,7 @@ function deleteTweet(id: number): void {
 }
 
 const sortedByPosts = computed(() => {
-  const currentPost = props.posts.filter(
-    (post) => post.user_id === props.currentUser.id
-  );
-  return currentPost.sort((a, b) => {
+  return props.posts.data.sort((a, b) => {
     return b.id - a.id;
   });
 });
@@ -111,5 +122,19 @@ const sortedByPosts = computed(() => {
         </div>
       </li>
     </ul>
+
+    <div>
+      <ul class="flex items-center">
+        <li v-for="link in posts.links">
+          <button
+            :disabled="link.active"
+            @click="Inertia.get(link.url)"
+            :class="{ 'font-bold border-b-4  border-blue-500': link.active }"
+            class="ml-2"
+            v-html="link.label"
+          ></button>
+        </li>
+      </ul>
+    </div>
   </section>
 </template>

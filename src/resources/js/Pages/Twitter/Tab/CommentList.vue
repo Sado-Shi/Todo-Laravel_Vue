@@ -44,14 +44,14 @@ function deleteTweet(id: number): void {
   }
 }
 
-const sortedByPosts = computed(() => {
-  const currentPost = props.posts.filter(
-    (post) => post.user_id === props.currentUser.id
-  );
-  return currentPost.sort((a, b) => {
-    return b.id - a.id;
-  });
-});
+// const sortedByPosts = computed(() => {
+//   const currentPost = props.posts.filter(
+//     (post) => post.user_id === props.currentUser.id
+//   );
+//   return currentPost.sort((a, b) => {
+//     return b.id - a.id;
+//   });
+// });
 </script>
 
 <template>
